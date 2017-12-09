@@ -17,27 +17,24 @@ const getImgTag = function(object) {
     return `<img src="${object.images.downsized.url}">`;
 }
 
-const onDataLoaded = function(data) {
-    // const imgTag = getImgTag(gifData.data['0'])
-
-    $('.js-content').html(`<img src="${data.Poster}" />`);
+const onDataLoaded = function(gifData) {
+    
 }
 
-const onKeyPress = function(evtObj) {
+const onKeyPress = async function(evtObj) {
 
     if (evtObj.key === 'Enter') {
         evtObj.preventDefault()
         console.log('key is pressed', evtObj.key)
-        const searchQuery = gifQuery.val(); 
+        const searchQuery = gifQuery.val();
         gifQuery.attr('placeholder', searchQuery)
         gifQuery.val('');
 
-        // http://www.omdbapi.com/?t=the+godfather&apikey=8fe821b
-        // const apiEndpoint = `http://api.giphy.com/v1/gifs/search?api_key=092c46931d544511a32b9911142ec6b9&q=${searchQuery}`
-        
-        const apiEndpoint = `http://www.omdbapi.com/?t=${searchQuery}&apikey=8fe821b`
-        $.get(apiEndpoint).then(onDataLoaded)
-       
+        const apiEndpoint = `http://api.giphy.com/v1/gifs/search?api_key=092c46931d544511a32b9911142ec6b9&q=${searchQuery}`
+        const gifData = await $.get(apiEndpoint)
+        console.log(gifData)
+        const imgTag = getImgTag(gifData.data['0'])
+        $('.js-content').html(imgTag);
     }
 };
 
